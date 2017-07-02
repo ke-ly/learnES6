@@ -59,6 +59,8 @@
 
 	var _lottery2 = _interopRequireDefault(_lottery);
 
+	__webpack_require__(304);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
@@ -8738,6 +8740,37 @@
 /***/ (function(module, exports) {
 
 	"use strict";
+
+/***/ }),
+/* 304 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	{
+	    // ES5 
+	    var rex1 = new RegExp('xyz', 'i');
+	    var rex2 = new RegExp(/xyz/i);
+
+	    console.log(rex1.test('xyz123'), rex2.test('xyz123'));
+
+	    //ES6
+
+	    var rex3 = new RegExp(/xqre/ig, 'i'); //后面的i会覆盖掉前面的ig；
+
+	    console.log(rex3.flags);
+	}
+
+	{
+	    var s = 'bbb_bb_b';
+	    var _rex = /b+/g;
+	    var _rex2 = new RegExp('b+', 'y');
+
+	    console.log('one', _rex.exec(s), _rex2.exec(s)); //exec接收字符串，返回第一个匹配项信息的数组；没有匹配返回null
+	    console.log('two', _rex.exec(s), _rex2.exec(s));
+
+	    console.log(_rex.sticky, _rex2.sticky); //sticky判断是否开启粘连模式
+	}
 
 /***/ })
 /******/ ]);
