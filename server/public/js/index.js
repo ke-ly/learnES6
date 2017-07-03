@@ -8747,29 +8747,123 @@
 
 	'use strict';
 
+	var _templateObject = _taggedTemplateLiteral(['\u6211\u662F', ',\u6211\u8981\u8BF4', ''], ['\u6211\u662F', ',\u6211\u8981\u8BF4', '']),
+	    _templateObject2 = _taggedTemplateLiteral(['Hi \n', ''], ['Hi \\n', '']);
+
+	function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 	{
-	    // ES5 
-	    var rex1 = new RegExp('xyz', 'i');
-	    var rex2 = new RegExp(/xyz/i);
+	    console.log('a', 'a');
+	    console.log('c', '\u20BB7');
 
-	    console.log(rex1.test('xyz123'), rex2.test('xyz123'));
-
-	    //ES6
-
-	    var rex3 = new RegExp(/xqre/ig, 'i'); //后面的i会覆盖掉前面的ig；
-
-	    console.log(rex3.flags);
+	    console.log('c', '\uD842\uDFB7');
 	}
 
 	{
-	    var s = 'bbb_bb_b';
-	    var _rex = /b+/g;
-	    var _rex2 = new RegExp('b+', 'y');
+	    var s = '𠮷';
 
-	    console.log('one', _rex.exec(s), _rex2.exec(s)); //exec接收字符串，返回第一个匹配项信息的数组；没有匹配返回null
-	    console.log('two', _rex.exec(s), _rex2.exec(s));
+	    console.log('长度：', s.length);
+	    console.log('0：', s.charAt(0)); //取第一个字符
+	    console.log('1：', s.charAt(1));
+	    console.log('at0：', s.charCodeAt(0)); //ES5获取Unicode的码值
+	    console.log('at1：', s.charCodeAt(1));
 
-	    console.log(_rex.sticky, _rex2.sticky); //sticky判断是否开启粘连模式
+	    var s1 = '𠮷a';
+
+	    console.log('长度：', s1.length);
+	    console.log('code0：', s1.codePointAt(0)); //第一个字符，10进制
+	    console.log('code0：', s1.codePointAt(0).toString(16)); //16进制
+
+	    console.log('code1：', s1.codePointAt(1));
+	    console.log('code2：', s1.codePointAt(2));
+	}
+
+	{
+	    console.log("es5", String.fromCharCode('0x20bb7'));
+	    console.log("es6", String.fromCodePoint('0x20bb7'));
+	}
+	//字符串的遍历
+	{
+	    var str = '\uD842\uDFB7abc';
+	    for (var i = 0; i < str.length; i++) {
+	        console.log('es5', str[i]);
+	    }
+
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	        for (var _iterator = str[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var code = _step.value;
+
+	            console.log("es6", code);
+	        }
+	    } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
+	            }
+	        } finally {
+	            if (_didIteratorError) {
+	                throw _iteratorError;
+	            }
+	        }
+	    }
+	}
+	//判断字符串中是否包含某些字符
+	{
+	    var _str = 'string';
+
+	    console.log('字符串中是否包含r', _str.includes('r'));
+	    console.log('字符串是否以str开始的', _str.startsWith('str'));
+	    console.log('字符串是否以ing结束的', _str.endsWith('ing'));
+	}
+	//重复字符串
+	{
+	    var a = 'sb';
+
+	    console.log('将sb重复3次：', a.repeat(3));
+	}
+
+	//模板字符串
+	{
+	    var name = void 0,
+	        info = void 0;
+	    name = '毛毛';
+	    info = 'Hello word';
+
+
+	    var m = '\u4F60\u7684\u540D\u5B57\u662F' + name + '\u5417?\u5982\u679C\u662F\u8BF7\u8BF4' + info;
+
+	    console.log(m);
+	}
+	//字符串补白，ES7
+	{
+	    console.log('将字符串用第二个参数补到长度为第一个参数，向前补', '2'.padStart(2, '0'));
+	    console.log('将字符串用第二个参数补到长度为第一个参数，向后补', '2'.padEnd(2, '0'));
+	}
+	//标签模板；防止xss攻击？多语言？
+	{
+	    var xyz = function xyz(s, v1, v2) {
+	        console.log(s, v1, v2);
+	        return s + v1 + v2;
+	    };
+
+	    var user = {
+	        name: '毛毛',
+	        info: 'hello word'
+	    };
+
+	    console.log(xyz(_templateObject, user.name, user.info));
+	}
+	//raw ,转译斜杠
+	{
+	    console.log(String.raw(_templateObject2, 5 + 2));
+	    console.log('Hi \n' + (5 + 2));
 	}
 
 /***/ })

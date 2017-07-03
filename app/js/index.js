@@ -6,4 +6,5 @@ import Lottery from './lottery';
 
 //import './class_k/lesson1';
 //import './class_k/lesson2';
-import './class_k/lesson3';
+//import './class_k/lesson3';
+import './class_k/lesson4';
