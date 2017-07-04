@@ -8747,57 +8747,51 @@
 
 	'use strict';
 
-	var _templateObject = _taggedTemplateLiteral(['\u6211\u662F', ',\u6211\u8981\u8BF4', ''], ['\u6211\u662F', ',\u6211\u8981\u8BF4', '']),
-	    _templateObject2 = _taggedTemplateLiteral(['Hi \n', ''], ['Hi \\n', '']);
-
-	function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	{
-	    console.log('a', 'a');
-	    console.log('c', '\u20BB7');
+	    console.log('=========数组=========');
 
-	    console.log('c', '\uD842\uDFB7');
+	    //将一组值转化为数组
+	    var arr = Array.of(1, 2, 3, 4, '5', 'sb');
+	    console.log('arr=', arr); //[1, 2, 3, 4, "5", "sb"]
+
+	    var empty = Array.of();
+	    console.log('empty=', empty); //[]
 	}
 
 	{
-	    var s = '𠮷';
-
-	    console.log('长度：', s.length);
-	    console.log('0：', s.charAt(0)); //取第一个字符
-	    console.log('1：', s.charAt(1));
-	    console.log('at0：', s.charCodeAt(0)); //ES5获取Unicode的码值
-	    console.log('at1：', s.charCodeAt(1));
-
-	    var s1 = '𠮷a';
-
-	    console.log('长度：', s1.length);
-	    console.log('code0：', s1.codePointAt(0)); //第一个字符，10进制
-	    console.log('code0：', s1.codePointAt(0).toString(16)); //16进制
-
-	    console.log('code1：', s1.codePointAt(1));
-	    console.log('code2：', s1.codePointAt(2));
+	    // 将伪数组转化为正真的数组如：NodeList
+	    var div = document.querySelectorAll('div');
+	    var divArr = Array.from(div);
+	    div.forEach(function (i) {
+	        console.log(i.textContent);
+	    });
+	    //和map相似
+	    console.log('映射q', Array.from([1, 2, 3], function (i) {
+	        return i * 2;
+	    }));
 	}
 
 	{
-	    console.log("es5", String.fromCharCode('0x20bb7'));
-	    console.log("es6", String.fromCodePoint('0x20bb7'));
+	    //填充数组
+	    console.log('fill-7', ['a', 1, undefined].fill(7));
+	    console.log('fill-7', ['a', 'b', 'c', 'd', 'e', 'f', 'g'].fill(7, 1, 4));
 	}
-	//字符串的遍历
+
 	{
-	    var str = '\uD842\uDFB7abc';
-	    for (var i = 0; i < str.length; i++) {
-	        console.log('es5', str[i]);
-	    }
+	    //遍历
+	    var _arr = [1, 2, 'a', 'c', undefined];
 
 	    var _iteratorNormalCompletion = true;
 	    var _didIteratorError = false;
 	    var _iteratorError = undefined;
 
 	    try {
-	        for (var _iterator = str[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	            var code = _step.value;
+	        for (var _iterator = _arr.keys()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var index = _step.value;
 
-	            console.log("es6", code);
+	            console.log('keys', index); //返回下标
 	        }
 	    } catch (err) {
 	        _didIteratorError = true;
@@ -8813,57 +8807,80 @@
 	            }
 	        }
 	    }
+
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+
+	    try {
+	        for (var _iterator2 = _arr.values()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	            var val = _step2.value;
+
+	            console.log('values', val); //返回值
+	        }
+	    } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	            }
+	        } finally {
+	            if (_didIteratorError2) {
+	                throw _iteratorError2;
+	            }
+	        }
+	    }
+
+	    var _iteratorNormalCompletion3 = true;
+	    var _didIteratorError3 = false;
+	    var _iteratorError3 = undefined;
+
+	    try {
+	        for (var _iterator3 = _arr.entries()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	            var _step3$value = _slicedToArray(_step3.value, 2),
+	                _index = _step3$value[0],
+	                _val = _step3$value[1];
+
+	            console.log('entries', _index, _val); //返回下标和值
+	        }
+	    } catch (err) {
+	        _didIteratorError3 = true;
+	        _iteratorError3 = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                _iterator3.return();
+	            }
+	        } finally {
+	            if (_didIteratorError3) {
+	                throw _iteratorError3;
+	            }
+	        }
+	    }
 	}
-	//判断字符串中是否包含某些字符
-	{
-	    var _str = 'string';
 
-	    console.log('字符串中是否包含r', _str.includes('r'));
-	    console.log('字符串是否以str开始的', _str.startsWith('str'));
-	    console.log('字符串是否以ing结束的', _str.endsWith('ing'));
-	}
-	//重复字符串
 	{
-	    var a = 'sb';
-
-	    console.log('将sb重复3次：', a.repeat(3));
+	    console.log([1, 2, 3, 4, 5].copyWithin(0, 3, 4));
 	}
 
-	//模板字符串
 	{
-	    var name = void 0,
-	        info = void 0;
-	    name = '毛毛';
-	    info = 'Hello word';
-
-
-	    var m = '\u4F60\u7684\u540D\u5B57\u662F' + name + '\u5417?\u5982\u679C\u662F\u8BF7\u8BF4' + info;
-
-	    console.log(m);
+	    //查找
+	    console.log([1, 2, 3, 4, 5, 'a'].find(function (i) {
+	        //只找第一个,返回的值
+	        return i > 3;
+	    }));
+	    console.log([1, 2, 3, 4, 5, 'a'].findIndex(function (i) {
+	        //只找第一个,返回下标
+	        return i > 3;
+	    }));
 	}
-	//字符串补白，ES7
-	{
-	    console.log('将字符串用第二个参数补到长度为第一个参数，向前补', '2'.padStart(2, '0'));
-	    console.log('将字符串用第二个参数补到长度为第一个参数，向后补', '2'.padEnd(2, '0'));
-	}
-	//标签模板；防止xss攻击？多语言？
-	{
-	    var xyz = function xyz(s, v1, v2) {
-	        console.log(s, v1, v2);
-	        return s + v1 + v2;
-	    };
 
-	    var user = {
-	        name: '毛毛',
-	        info: 'hello word'
-	    };
-
-	    console.log(xyz(_templateObject, user.name, user.info));
-	}
-	//raw ,转译斜杠
 	{
-	    console.log(String.raw(_templateObject2, 5 + 2));
-	    console.log('Hi \n' + (5 + 2));
+	    console.log('num', [1, 2, NaN].includes(1)); //是否包含1
+	    console.log('as', [1, 'a', NaN].includes('as')); //是否包含as
+	    console.log('NaN', [1, 'a', NaN].includes(NaN)); //是否包含NaN
 	}
 
 /***/ })
