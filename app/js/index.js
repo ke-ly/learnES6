@@ -9,4 +9,5 @@ import Lottery from './lottery';
 //import './class_k/lesson3';
 //import './class_k/lesson4';
 //import './class_k/lesson5';
-import './class_k/lesson6';
+//import './class_k/lesson6';
+import './class_k/lesson7';

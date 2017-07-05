@@ -8747,140 +8747,103 @@
 
 	'use strict';
 
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 	{
-	    console.log('=========数组=========');
+	    //函数默认值;默认值后面不能再有没有默认值的参数
+	    var test = function test(x) {
+	        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'word';
 
-	    //将一组值转化为数组
-	    var arr = Array.of(1, 2, 3, 4, '5', 'sb');
-	    console.log('arr=', arr); //[1, 2, 3, 4, "5", "sb"]
+	        console.log('默认值:', x, y);
+	    };
 
-	    var empty = Array.of();
-	    console.log('empty=', empty); //[]
+	    test('hello');
+	    test('hello', 'sb');
 	}
 
 	{
-	    // 将伪数组转化为正真的数组如：NodeList
-	    var div = document.querySelectorAll('div');
-	    var divArr = Array.from(div);
-	    div.forEach(function (i) {
-	        console.log(i.textContent);
-	    });
-	    //和map相似
-	    console.log('映射q', Array.from([1, 2, 3], function (i) {
-	        return i * 2;
-	    }));
+	    var test2 = function test2(x) {
+	        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
+
+	        console.log('作用域:', x, y);
+	    };
+
+	    //作用域
+	    var x = 'word';
+
+	    test2('sb'); // sb sb;如果调用时传了值，就是传的值，反之则是变量
 	}
 
 	{
-	    //填充数组
-	    console.log('fill-7', ['a', 1, undefined].fill(7));
-	    console.log('fill-7', ['a', 'b', 'c', 'd', 'e', 'f', 'g'].fill(7, 1, 4));
-	}
-
-	{
-	    //遍历
-	    var _arr = [1, 2, 'a', 'c', undefined];
-
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-
-	    try {
-	        for (var _iterator = _arr.keys()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	            var index = _step.value;
-
-	            console.log('keys', index); //返回下标
+	    //rest 参数，在不确定有多少个参数时，将你的参数转化为数组其后也不能加参数
+	    var test3 = function test3() {
+	        for (var _len = arguments.length, a = Array(_len), _key = 0; _key < _len; _key++) {
+	            a[_key] = arguments[_key];
 	        }
-	    } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	    } finally {
+
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
 	        try {
-	            if (!_iteratorNormalCompletion && _iterator.return) {
-	                _iterator.return();
+	            for (var _iterator = a[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var i = _step.value;
+
+	                console.log('rest:', i);
 	            }
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
 	        } finally {
-	            if (_didIteratorError) {
-	                throw _iteratorError;
+	            try {
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
+	                }
+	            } finally {
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
+	                }
 	            }
 	        }
-	    }
+	    };
 
-	    var _iteratorNormalCompletion2 = true;
-	    var _didIteratorError2 = false;
-	    var _iteratorError2 = undefined;
-
-	    try {
-	        for (var _iterator2 = _arr.values()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	            var val = _step2.value;
-
-	            console.log('values', val); //返回值
-	        }
-	    } catch (err) {
-	        _didIteratorError2 = true;
-	        _iteratorError2 = err;
-	    } finally {
-	        try {
-	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                _iterator2.return();
-	            }
-	        } finally {
-	            if (_didIteratorError2) {
-	                throw _iteratorError2;
-	            }
-	        }
-	    }
-
-	    var _iteratorNormalCompletion3 = true;
-	    var _didIteratorError3 = false;
-	    var _iteratorError3 = undefined;
-
-	    try {
-	        for (var _iterator3 = _arr.entries()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	            var _step3$value = _slicedToArray(_step3.value, 2),
-	                _index = _step3$value[0],
-	                _val = _step3$value[1];
-
-	            console.log('entries', _index, _val); //返回下标和值
-	        }
-	    } catch (err) {
-	        _didIteratorError3 = true;
-	        _iteratorError3 = err;
-	    } finally {
-	        try {
-	            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                _iterator3.return();
-	            }
-	        } finally {
-	            if (_didIteratorError3) {
-	                throw _iteratorError3;
-	            }
-	        }
-	    }
+	    test3(1, 'sv', 'sb', 4, 5, 6, undefined);
 	}
 
 	{
-	    console.log([1, 2, 3, 4, 5].copyWithin(0, 3, 4));
+	    var _console;
+
+	    (_console = console).log.apply(_console, [5, 'sb', 'aa', 44]); //5 "sb" "aa" 44;将数组转化为几个离散的值
 	}
 
 	{
-	    //查找
-	    console.log([1, 2, 3, 4, 5, 'a'].find(function (i) {
-	        //只找第一个,返回的值
-	        return i > 3;
-	    }));
-	    console.log([1, 2, 3, 4, 5, 'a'].findIndex(function (i) {
-	        //只找第一个,返回下标
-	        return i > 3;
-	    }));
+	    //箭头函数
+	    var arrow1 = function arrow1(v) {
+	        return v * 5;
+	    };
+	    console.log('arrow1', arrow1(2));
+
+	    var arrow2 = function arrow2() {
+	        return alert('arrow2');
+	    };
+	    //    arrow2();
+
+	    var arrow3 = function arrow3(v, b) {
+	        console.log(v, b * 2);
+	    };
+	    arrow3(5, '2'); //5,4
 	}
 
 	{
-	    console.log('num', [1, 2, NaN].includes(1)); //是否包含1
-	    console.log('as', [1, 'a', NaN].includes('as')); //是否包含as
-	    console.log('NaN', [1, 'a', NaN].includes(NaN)); //是否包含NaN
+	    var fx = function fx(v) {
+	        return tall(v);
+	    };
+
+	    //尾调用  
+	    var tall = function tall(v) {
+	        return console.log('tall:', v);
+	    };
+
+
+	    fx(125);
 	}
 
 /***/ })
