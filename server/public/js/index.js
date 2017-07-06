@@ -8747,103 +8747,75 @@
 
 	'use strict';
 
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	{
-	    //函数默认值;默认值后面不能再有没有默认值的参数
-	    var test = function test(x) {
-	        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'word';
+	    console.log('===symbol===');
+	    //声明
+	    var a1 = Symbol();
+	    var a2 = Symbol();
+	    console.log(a1 === a2); //false
 
-	        console.log('默认值:', x, y);
-	    };
-
-	    test('hello');
-	    test('hello', 'sb');
+	    var a3 = Symbol.for('sb');
+	    var a4 = Symbol.for('sb');
+	    console.log(a3 === a4); // true
 	}
 
 	{
-	    var test2 = function test2(x) {
-	        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
+	    var _obj;
 
-	        console.log('作用域:', x, y);
-	    };
+	    var symA = Symbol.for('a');
+	    var symB = Symbol.for('b');
 
-	    //作用域
-	    var x = 'word';
+	    var obj = (_obj = {}, _defineProperty(_obj, symA, '111'), _defineProperty(_obj, symB, '222'), _defineProperty(_obj, 'c', '333'), _defineProperty(_obj, 'd', '444'), _obj);
 
-	    test2('sb'); // sb sb;如果调用时传了值，就是传的值，反之则是变量
-	}
+	    for (var i in obj) {
+	        console.log('for-in:', obj[i]); // 333,444
+	    }
 
-	{
-	    //rest 参数，在不确定有多少个参数时，将你的参数转化为数组其后也不能加参数
-	    var test3 = function test3() {
-	        for (var _len = arguments.length, a = Array(_len), _key = 0; _key < _len; _key++) {
-	            a[_key] = arguments[_key];
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	        for (var _iterator = Object.entries(obj)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var _step$value = _slicedToArray(_step.value, 2),
+	                k = _step$value[0],
+	                v = _step$value[1];
+
+	            console.log('for-of:', [k, v]); //["c", "333"],["d", "444"]
 	        }
 
-	        var _iteratorNormalCompletion = true;
-	        var _didIteratorError = false;
-	        var _iteratorError = undefined;
-
+	        //for-in和for-of不能获取到symbol
+	    } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	    } finally {
 	        try {
-	            for (var _iterator = a[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                var i = _step.value;
-
-	                console.log('rest:', i);
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
 	            }
-	        } catch (err) {
-	            _didIteratorError = true;
-	            _iteratorError = err;
 	        } finally {
-	            try {
-	                if (!_iteratorNormalCompletion && _iterator.return) {
-	                    _iterator.return();
-	                }
-	            } finally {
-	                if (_didIteratorError) {
-	                    throw _iteratorError;
-	                }
+	            if (_didIteratorError) {
+	                throw _iteratorError;
 	            }
 	        }
-	    };
+	    }
 
-	    test3(1, 'sv', 'sb', 4, 5, 6, undefined);
-	}
+	    Object.getOwnPropertySymbols(obj).forEach(function (item) {
+	        //Object.getOwnPropertySymbols(obj)返回一个数组
+	        console.log('getOwnPropertySymbols:', obj[item]); //111,2222    
+	    });
+	    //getOwnPropertySymbols只能获取symbol而不能获取其他的
 
-	{
-	    var _console;
+	    Reflect.ownKeys(obj).forEach(function (item) {
+	        //Reflect.ownKeys(obj) 也返回一个数组
+	        console.log('Reflect.ownKeys:', obj[item]); //333,444,111,222   
+	    });
 
-	    (_console = console).log.apply(_console, [5, 'sb', 'aa', 44]); //5 "sb" "aa" 44;将数组转化为几个离散的值
-	}
-
-	{
-	    //箭头函数
-	    var arrow1 = function arrow1(v) {
-	        return v * 5;
-	    };
-	    console.log('arrow1', arrow1(2));
-
-	    var arrow2 = function arrow2() {
-	        return alert('arrow2');
-	    };
-	    //    arrow2();
-
-	    var arrow3 = function arrow3(v, b) {
-	        console.log(v, b * 2);
-	    };
-	    arrow3(5, '2'); //5,4
-	}
-
-	{
-	    var fx = function fx(v) {
-	        return tall(v);
-	    };
-
-	    //尾调用  
-	    var tall = function tall(v) {
-	        return console.log('tall:', v);
-	    };
-
-
-	    fx(125);
+	    //    Reflect.ownKeys(obj) 就可以获取所有的值
 	}
 
 /***/ })
