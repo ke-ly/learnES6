@@ -4,4 +4,4 @@
 //import './class/lesson1';
 
 
-import './class_k/set_map&arr_obj';
+import './class_k/proxy&reflect';

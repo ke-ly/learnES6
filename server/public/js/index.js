@@ -61,112 +61,93 @@
 
 	'use strict';
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	{
-	    console.info('map和array的区别');
-	    var map = new Map();
-	    var arr = [];
+	    console.info('proxy&reflct');
 
-	    //增
-	    map.set('t', 1);
-	    arr.push({ t: 1 });
-	    console.log('Map-array-增', map, arr);
+	    var obj = {
+	        name: '毛毛',
+	        age: 24,
+	        time: '2017-07-09',
+	        _r: 123
+	    };
 
-	    //查
-	    var map_exist = map.has('t');
-	    var arr_exist = arr.find(function (item) {
-	        return item.t;
+	    var monitor = new Proxy(obj, {
+	        //拦截读取数据
+	        get: function get(target, key) {
+	            return target[key].replace('2017', '2015');
+	        },
+
+	        //拦截设置数据
+	        set: function set(target, key, value) {
+	            if (key == 'name') {
+	                return target[key] = value;
+	            } else {
+	                return target[key]; // '该值不能修改，返回它自己';   
+	            }
+	        },
+
+	        // 拦截key in obj
+	        has: function has(target, key) {
+	            if (key === 'name') {
+	                return true;
+	            } else {
+	                return false;
+	            }
+	        },
+
+	        //拦截delete
+	        deleteProperty: function deleteProperty(target, key) {
+	            if (key.indexOf('_') > -1) {
+	                delete target[key];
+	                return true; //必须要加
+	            } else {
+	                return target[key]; // '该值不能修改，返回它自己';      
+	            }
+	        },
+
+	        //拦截Object.keys, Object.getOwnPropertySymbols,Object.getOwnPropertyNames
+	        ownKeys: function ownKeys(target, key) {
+	            return Object.keys(target).filter(function (item) {
+	                return item != 'time';
+	            }); //filter 过滤  
+	        }
 	    });
+	    console.log('get', monitor.time);
+	    monitor.name = 'sbbb';
+	    monitor.time = '2018-01-01';
+	    console.log('set', monitor);
+	    console.log('has', 'name' in monitor, 'time' in monitor);
 
-	    console.log('Map-array-查', map_exist, arr_exist);
+	    delete monitor.name;
+	    delete monitor._r;
+	    console.log('deleteProperty', monitor);
 
-	    //改
-	    map.set('t', 2);
-	    arr.forEach(function (item) {
-	        return item.t ? item.t = 2 : '';
-	    });
-	    console.log('Map-array-改', map, arr);
+	    console.log('Object.keys', Object.keys(obj));
 
-	    //删
-	    map.delete('t');
-	    var index = arr.findIndex(function (item) {
-	        return item.t;
-	    }); //先用findIndex找下标
-	    arr.splice(index, 1); //再用splice删除
-	    console.log('Map-array-删', map, arr);
+	    console.log('ownKeys', Object.keys(monitor)); //["name", "age"]
 	}
 
 	{
-	    console.info('Set和array的区别');
+	    var sym = Symbol.for('t');
+	    var _obj = _defineProperty({
+	        name: '毛毛',
+	        age: 24,
+	        time: '2017-07-09',
+	        _r: 123
+	    }, sym, 'Symbol');
 
-	    var set = new Set();
-	    var _arr = [];
-	    var obj = { s: 'b' };
+	    console.log('Reflect.get', Reflect.get(_obj, 'time'));
+	    Reflect.set(_obj, 'name', 'sbbb');
+	    console.log('Reflect.set', _obj);
 
-	    //增
-	    set.add(obj);
-	    _arr.push({ s: 'b' });
-	    console.log('Set-array-增', set, _arr);
+	    console.log('Reflect.has', Reflect.has(_obj, '_r'));
 
-	    //查
-	    var set_exist = set.has(obj); // true
-	    var _arr_exist = _arr.find(function (item) {
-	        return item.s;
-	    });
-	    console.log('Set-array-查', set_exist, _arr_exist);
+	    Reflect.deleteProperty(_obj, '_r');
+	    console.log('Reflect.deleteProperty', _obj);
 
-	    //改
-	    set.forEach(function (item) {
-	        return item.s ? item.s = 'bb' : '';
-	    });
-	    _arr.forEach(function (item) {
-	        return item.s ? item.s = 'bb' : '';
-	    });
-	    console.log('Set-array-改', set, _arr);
-
-	    //删
-	    //    set.delete(obj); //11
-	    set.forEach(function (item) {
-	        return item.s ? set.delete(item) : '';
-	    }); //22
-	    var _index = _arr.findIndex(function (item) {
-	        return item.t;
-	    }); //先用findIndex找下标
-	    _arr.splice(_index, 1); //再用splice删除
-	    console.log('Set-array-删', set, _arr);
-	}
-
-	{
-	    console.info('map、set、obj三者的比较');
-
-	    var item = { s: 'b' };
-	    var _map = new Map();
-	    var _set = new Set();
-	    var _obj = {};
-
-	    //增
-	    _map.set('s', 'b');
-	    _set.add(item);
-	    _obj.s = 'b';
-	    console.log('map、set、obj-增', _map, _set, _obj);
-
-	    //查    
-	    console.log('map、set、obj-查', {
-	        map_esist: _map.has('s'),
-	        set_exist: _set.has(item),
-	        obj_exist: 's' in _obj
-	    });
-
-	    //改    
-	    _map.set('s', 'bb');
-	    item.s = 'bb';
-	    _obj.s = 'bb';
-	    console.log('map、set、obj-改', _map, _set, _obj);
-
-	    //删
-	    _map.delete('s');
-	    _set.delete(item);
-	    delete _obj.s;
-	    console.log('map、set、obj-删', _map, _set, _obj);
+	    console.log('Reflect.ownKeys', Reflect.ownKeys(_obj));
 	}
 
 /***/ })
