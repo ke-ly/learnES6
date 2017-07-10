@@ -4,4 +4,4 @@
 //import './class/lesson1';
 
 
-import './class_k/proxy&reflect';
+import './class_k/promise';

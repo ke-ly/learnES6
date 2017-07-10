@@ -61,93 +61,109 @@
 
 	'use strict';
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+	console.log('promise解决异步操作的');
 	{
-	    console.info('proxy&reflct');
-
-	    var obj = {
-	        name: '毛毛',
-	        age: 24,
-	        time: '2017-07-09',
-	        _r: 123
+	    //es5
+	    var ajax = function ajax(cb) {
+	        console.log('开始');
+	        setTimeout(function () {
+	            cb && cb.call();
+	        }, 1000);
 	    };
 
-	    var monitor = new Proxy(obj, {
-	        //拦截读取数据
-	        get: function get(target, key) {
-	            return target[key].replace('2017', '2015');
-	        },
-
-	        //拦截设置数据
-	        set: function set(target, key, value) {
-	            if (key == 'name') {
-	                return target[key] = value;
-	            } else {
-	                return target[key]; // '该值不能修改，返回它自己';   
-	            }
-	        },
-
-	        // 拦截key in obj
-	        has: function has(target, key) {
-	            if (key === 'name') {
-	                return true;
-	            } else {
-	                return false;
-	            }
-	        },
-
-	        //拦截delete
-	        deleteProperty: function deleteProperty(target, key) {
-	            if (key.indexOf('_') > -1) {
-	                delete target[key];
-	                return true; //必须要加
-	            } else {
-	                return target[key]; // '该值不能修改，返回它自己';      
-	            }
-	        },
-
-	        //拦截Object.keys, Object.getOwnPropertySymbols,Object.getOwnPropertyNames
-	        ownKeys: function ownKeys(target, key) {
-	            return Object.keys(target).filter(function (item) {
-	                return item != 'time';
-	            }); //filter 过滤  
-	        }
+	    ajax(function () {
+	        console.log('cbbb');
 	    });
-	    console.log('get', monitor.time);
-	    monitor.name = 'sbbb';
-	    monitor.time = '2018-01-01';
-	    console.log('set', monitor);
-	    console.log('has', 'name' in monitor, 'time' in monitor);
-
-	    delete monitor.name;
-	    delete monitor._r;
-	    console.log('deleteProperty', monitor);
-
-	    console.log('Object.keys', Object.keys(obj));
-
-	    console.log('ownKeys', Object.keys(monitor)); //["name", "age"]
 	}
 
 	{
-	    var sym = Symbol.for('t');
-	    var _obj = _defineProperty({
-	        name: '毛毛',
-	        age: 24,
-	        time: '2017-07-09',
-	        _r: 123
-	    }, sym, 'Symbol');
+	    //promise基本调用
+	    var _ajax = function _ajax() {
+	        console.log('又开始啦');
+	        return new Promise(function (resolve, reject) {
+	            setTimeout(function () {
+	                resolve();
+	            }, 1000);
+	        });
+	    };
 
-	    console.log('Reflect.get', Reflect.get(_obj, 'time'));
-	    Reflect.set(_obj, 'name', 'sbbb');
-	    console.log('Reflect.set', _obj);
+	    _ajax().then(function () {
+	        console.log('promise的resolve-1');
+	        return new Promise(function (resolve, reject) {
+	            setTimeout(function () {
+	                resolve();
+	            }, 2000);
+	        });
+	    }).then(function () {
+	        console.log('promise的resolve-2');
+	        return new Promise(function (resolve, reject) {
+	            setTimeout(function () {
+	                resolve();
+	            }, 3000);
+	        });
+	    }).then(function () {
+	        console.log('promise的resolve-over');
+	    });
+	}
 
-	    console.log('Reflect.has', Reflect.has(_obj, '_r'));
+	{
+	    //捕获错误
+	    var _ajax2 = function _ajax2(num) {
+	        return new Promise(function (resolve, reject) {
+	            if (num > 5) {
+	                resolve();
+	            } else {
+	                throw new Error('出错啦，sb！');
+	            }
+	        });
+	    };
 
-	    Reflect.deleteProperty(_obj, '_r');
-	    console.log('Reflect.deleteProperty', _obj);
+	    _ajax2(6).then(function () {
+	        console.log('num is', 6);
+	    }).catch(function (err) {
+	        console.log('catch', err);
+	    });
 
-	    console.log('Reflect.ownKeys', Reflect.ownKeys(_obj));
+	    _ajax2(3).then(function () {
+	        //小于5，不执行resolve();
+	        console.log('num is', 3);
+	    }).catch(function (err) {
+	        console.log('catch', err);
+	    });
+	}
+
+	{
+	    var loadImg = function loadImg(src) {
+	        return new Promise(function (resolve, reject) {
+	            var img = document.createElement('img');
+	            img.src = src;
+
+	            img.onload = function () {
+	                resolve(img);
+	            };
+	            img.onerror = function (err) {
+	                reject(err);
+	            };
+	        });
+	    };
+
+	    var showImgs = function showImgs(imgs) {
+	        imgs.forEach(function (item) {
+	            document.body.appendChild(item);
+	        });
+	    };
+
+	    var showImg = function showImg(img) {
+	        var div = document.createElement('div');
+	        div.appendChild(img);
+	        document.body.appendChild(div);
+	    };
+
+	    Promise.all([//三个都加载完才执行       
+	    loadImg('http://img95.699pic.com/photo/2016/08/26/97d2cfe5-b8f9-4cfe-ac3b-f6a945f1510e.jpg_wh300.jpg'), loadImg('http://img95.699pic.com/photo/2016/08/26/1ba2f350-d2b2-459b-aab1-25bd4f0951f9.jpg_wh300.jpg'), loadImg('http://img95.699pic.com/photo/2016/08/27/8295177e-441a-4624-a858-8c48fb8e2a02.jpg_wh300.jpg')]).then(showImgs);
+
+	    Promise.race([//一个加载完就执行        
+	    loadImg('http://img95.699pic.com/photo/2016/08/26/97d2cfe5-b8f9-4cfe-ac3b-f6a945f1510e.jpg_wh300.jpg11'), loadImg('http://img95.699pic.com/photo/2016/08/26/1ba2f350-d2b2-459b-aab1-25bd4f0951f9.jpg_wh300.jpg'), loadImg('http://img95.699pic.com/photo/2016/08/27/8295177e-441a-4624-a858-8c48fb8e2a02.jpg_wh300.jpg')]).then(showImg);
 	}
 
 /***/ })
