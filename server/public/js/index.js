@@ -65,7 +65,7 @@
 
 	'use strict';
 
-	__webpack_require__(3);
+	__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./lottery/base.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	__webpack_require__(4);
 
@@ -74,12 +74,7 @@
 	__webpack_require__(6);
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-/***/ }),
+/* 3 */,
 /* 4 */
 /***/ (function(module, exports) {
 
