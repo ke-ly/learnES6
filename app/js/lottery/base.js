@@ -112,7 +112,7 @@ class Base {
         e.preventDefault();     
         let self = this;
         let $cur = $(e.currentTarget);
-        let index - $cur.index(); 
+        let index = $cur.index(); 
         
         $('.boll-list .btn-boll').removeClass('btn-boll-active');
         if(index === 0){
@@ -165,5 +165,113 @@ class Base {
         let self = this;
         let $active = $('.boll-list .btn-boll-active').text().match(/\d{2}/g);
         let active = $active?$active.length:0;
+        let count = self.computeCount(active,self.cur_play);
+        if(count){            self.addCodeItem($active.join(''),self.cur_play,self.play_list.get(self.cur_play).name,count)
+        }        
+    }
+    /**
+     *[addCodeItem 添加单次号码]     
+     *@param  {[type]} code [desc]    
+     *@param  {[type]} type [desc]    
+     *@param  {[type]} typeName [desc]    
+     *@param  {[type]} count [desc]    
+     */
+    addCodeItem(code,type,typeName,count){
+        let self = this;
+        const tpl = `
+            <li codes="${type}|${code}" bonus="${count*2}" count="${count}">
+                <div class="code">
+                    <b>${typeName}${count>1?'复式':'单式'}</b>
+                    <b class="em">${code}</b>
+                    [${count}注，<em class="code-list-money">${count*2}</em>元]
+                </div>
+            </li>
+        `;
+        $(self.cart_el).append(tpl);
+        self.getTotal();
+        
+    }
+    /**
+     *[getCount 计算次数]     
+     * 
+     */
+    getCount(){
+        let self = this;
+        let active = $('.boll-list .btn-boll-active').length;
+        let count = self.computeCount(active,slef.cur_play);
+        let range = self.computeBonus(active,self.cur_play);
+        let money = count*2;
+        let win1 = range[0] - money;
+        let win2 = range[1] - money;
+        let tpl;
+        let c1 = (win1<0&&win2<0)?Math.abs(win1):win1;
+        let c2 = (win1<0&&win2<0)?Math.abs(win2):win2;
+        
+        if(count === 0){
+            tpl = `您选了<b class="red">${count}</b>注，共<b class="red">${money}</b>元`;
+        }else if(range[0] == range[1]){
+            tpl = `您选了<b class="red">${count}</b>注，共<b class="red">${money}</b>元
+            <em>若中奖，奖金：<strong class="red">${range[0]}</strong>元，
+            您奖${win1>=0?'盈利':'亏损'}<strong class="${win1>=0?'red':'green'}">
+            ${Math.abs(win1)}</strong>元</em>
+            `;        
+        }else{
+            tpl = `您选了<b class="red">${count}</b>注，共<b class="red">${money}</b>元
+            <em>若中奖，奖金：<strong class="red">${range[0]}</strong>至
+            <strong class="red">${range[1]}</strong>元，
+            您奖${(win1<0&&win2<0)?'盈利':'亏损'}<strong class="${win1>=0?'red':'green'}">
+            ${c1}</strong>至<strong class="${win2>=0?'red':'green'}">${c2}</strong>元</em>
+            `; 
+        }
+        
+        $('.sel_info').html(tpl);
+        
+    }
+     /**
+     *[getTotal 计算所有金额]     
+     * 
+     */
+    getTotal(){
+        let count = 0;
+        $('.codelist li').each(function(i,t){
+            count += $(t).attr(count)*1;    
+        })
+        
+        $('#count').text(count);
+        $('#money').text(count*2);
+    }
+    
+    /**
+     *[getRandom 生成随机数]     
+     * 
+     */
+    getRandom(num){
+        let arr =[],index;
+        let number = Array.from(this.number);
+        while (num--){
+            index = Number.parseInt(Math.random()*number.length);
+            arr.push(number[index]);
+            number.splice(index,1);
+        }
+        return arr.join('');
+    }
+    /**
+     *[getRandom 添加随机号码]     
+     * 
+     */
+    getRandomCode(e){
+        e.preventDefault();
+        let self = this;
+        let num = e.currentTarget.getAttribute('count');
+        let play = this.cur_play.match(/\d+/g)[0];
+        
+        if(num === '0'){
+            $(self.cart_el).html('');
+        }else{
+            for(let i=0;i<num;i++){                         self.addCodeItem(self.getRandom(play),self.cur_play,self.play_list.get(self.cur_play).name,1)
+            }
+        }
     }
 }
+
+export default Base;
