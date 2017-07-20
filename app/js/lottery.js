@@ -46,7 +46,7 @@ class Lottery extends mix(Base,Calculate,Interface,Timer){
         this.omit = new Map();
         this.open_code = new Set();
         this.open_code_list = new Set();
-        this.play_list = new Set();
+        this.play_list = new Map();
         this.number = new Set();
         this.issue_el = '#curr_issue';
         this.countdown_el = '#countdown';

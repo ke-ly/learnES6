@@ -23,7 +23,7 @@ class Interface{
     
     getOpenCode(issue){//获取开奖号
         let self = this;
-        return Promise((resolve,reject) => {
+        return new Promise((resolve,reject) => {
             $.ajax({
                 url:'/get/opencode',
                 data:{
@@ -43,7 +43,7 @@ class Interface{
     
     getState(issue){//获取当前状态
         let self = this;
-        return Promise((resolve,reject) => {
+        return new Promise((resolve,reject) => {
             $.ajax({
                 url:'/get/state',
                 data:{
