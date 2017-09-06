@@ -1,17 +1,17 @@
 {//简洁表示法
     let o = 1;
     let k = 2;
-    
+
     let es5_obj = {
         oo:o,
         kk:k
-    }    
+    }
     let es6_obj = {
         o,k
-    }    
+    }
     console.log(es5_obj,es6_obj);
     //有方法的：
-    
+
     let es5_method = {
         hello:function(){
             console.log('es5_method!')
@@ -25,20 +25,32 @@
             console.log(x)
         }
     }
-    
+
     es5_method.hello();
     es6_method.haha('hahha');
-    
+
+}
+
+{
+    let birth = '1992/01/05';
+    let Person = {
+        name:'maoamo',
+        birth,
+        say(){
+            console.log(`我的名字是${this.name}，我的生日是${this.birth}`);
+        }
+    }
 }
 
 {// 属性表达式
     let key = 'name';
-    
+
     let es6Obj = {
-        [key]:'毛毛'
+        [key]:'毛毛',
+        ['a'+'bc']:123
     }
-    
-    console.log(es6Obj); //{name:'毛毛'}
+
+    console.log(es6Obj); //{name:'毛毛',abc:123}
 }
 
 {//常用新增API
@@ -46,7 +58,7 @@
     console.log('数组',Object.is([],[])); //false
     console.log('sb',Object.is(undefined,'undefined'));
     console.log('obj',Object.is({a:'a'},{a:'a'}));// false
-    
+
     let objA = {
         a:'a',
         b:'b',
@@ -57,13 +69,13 @@
         e:'2',
         f:'3'
     }
-    let objC = Object.assign(objA,objB); //拷贝（合并？），浅拷贝    
+    let objC = Object.assign(objA,objB); //拷贝（合并？），浅拷贝
     console.log(objC);
-    
+
     let name = '毛毛';
     let age = 10;
     let job = 'lol';
-    
+
     let p = {
         name,age,job
     }
